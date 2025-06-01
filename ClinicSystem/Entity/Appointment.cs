@@ -11,7 +11,6 @@ namespace ClinicSystem
 {
     public class Appointment
     {
-
         private Doctor doctor;
         private Patient patient;
         private Operation operation;
@@ -22,19 +21,27 @@ namespace ClinicSystem
         private DateTime endTime;
         private DateTime bookingDate;
 
-
         private int appointmentDetailNo;
         private double total;
         private Discount discounttype;
-        private string diagnosis;
+        private Diagnosis diagnosis;
         private string status;
-        private string prescription;
-
+        private Prescription prescription;
 
         public Appointment(Patient patient,
-           Doctor doctor, Operation operation,
-           DateTime startTime, DateTime endTime, double subtotal,
-           int roomno, int appointmentDetailNo, double total, Discount discounttype, string diagnosis, DateTime bookingDate,string status,string prescription)
+                           Doctor doctor,
+                           Operation operation,
+                           DateTime startTime,
+                           DateTime endTime,
+                           double subtotal,
+                           int roomno,
+                           int appointmentDetailNo,
+                           double total,
+                           Discount discounttype,
+                           Diagnosis diagnosis,
+                           DateTime bookingDate,
+                           string status,
+                           Prescription prescription)
         {
             this.patient = patient;
             this.startTime = startTime;
@@ -64,13 +71,14 @@ namespace ClinicSystem
             this.roomno = roomno;
             this.operation = operation;
             this.subtotal = subtotal;
-            this.appointmentDetailNo = appointmentDetailNo;;
+            this.appointmentDetailNo = appointmentDetailNo; ;
         }
 
         public Appointment(Patient patient,
            Operation operation,
            DateTime startTime, DateTime endTime, double subtotal,
-           int roomno, int appointmentDetailNo, double total, Discount discounttype, string diagnosis, DateTime bookingDate, string status, string prescription)
+           int roomno, int appointmentDetailNo, double total, Discount discounttype,
+           Diagnosis diagnosis, DateTime bookingDate, string status, Prescription prescription)
         {
             this.patient = patient;
             this.startTime = startTime;
@@ -87,12 +95,11 @@ namespace ClinicSystem
             this.status = status;
         }
 
- 
-
         public Appointment(Patient patient,
            Doctor doctor, Operation operation,
            DateTime startTime, DateTime endTime, double subtotal,
-           int roomno, int appointmentDetailNo, double total, Discount discounttype, string diagnosis, DateTime bookingDate, string status, PenaltyAppointment penaltyAppointment)
+           int roomno, int appointmentDetailNo, double total,
+           Discount discounttype, Diagnosis diagnosis, DateTime bookingDate, string status, PenaltyAppointment penaltyAppointment)
         {
             this.patient = patient;
             this.startTime = startTime;
@@ -110,8 +117,6 @@ namespace ClinicSystem
             this.penaltyAppointment = penaltyAppointment;
         }
 
-
-
         public PenaltyAppointment PenaltyAppointment { get => penaltyAppointment; }
         public Doctor Doctor { get => doctor; }
         public Operation Operation { get => operation; }
@@ -122,14 +127,14 @@ namespace ClinicSystem
 
         public DateTime BookingDate { get => bookingDate; }
 
-        public double SubTotal { get => subtotal;  }
+        public double SubTotal { get => subtotal; }
         public string Status { get => status; }
         public Discount Discount { get => discounttype; }
 
-        public string Prescription { get => prescription; }
         public int RoomNo { get => roomno; }
-        public string Diagnosis { get => diagnosis; }
+        public Diagnosis Diagnosis { get => diagnosis; }
         public int AppointmentDetailNo { get => appointmentDetailNo; }
         public double Total { get => total; }
+        public Prescription Ppp { get => prescription; set => prescription = value; }
     }
 }

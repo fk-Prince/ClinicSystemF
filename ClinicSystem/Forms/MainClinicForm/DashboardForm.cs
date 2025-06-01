@@ -6,6 +6,7 @@ using System.Web.UI.WebControls;
 using ClinicSystem.Entity;
 using ClinicSystem.UserLoginForm;
 using Guna.UI2.WinForms;
+using System.Linq;
 
 
 namespace ClinicSystem.MainClinic
@@ -457,7 +458,17 @@ namespace ClinicSystem.MainClinic
 
         private void notificationClicked(object sender, EventArgs e)
         {
-            List<Appointment> ap = clinicRepository.getUpcomingAppointment();
+            List<Appointment> ax = clinicRepository.getUpcomingAppointment();
+            List<Appointment> ap = new List<Appointment>();
+            foreach (Appointment b in ax)
+            {
+                if (!ap.Any(fg => fg.AppointmentDetailNo == b.AppointmentDetailNo))
+                {
+                    ap.Add(b);
+                }
+
+            }
+
             if (ap.Count == 0)
             {
                 missCount.ForeColor = Color.Black;

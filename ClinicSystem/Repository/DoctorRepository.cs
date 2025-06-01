@@ -68,6 +68,16 @@ namespace DoctorClinic
                                  LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
                                  LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
                                  LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                                 LEFT JOIN (
+                                  SELECT *
+                                  FROM prescription_tbl
+                                  LIMIT 1
+                                ) as p ON p.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                                LEFT JOIN (
+                                  SELECT *
+                                  FROM diagnosis_tbl
+                                  LIMIT 1
+                                ) d ON d.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
                                 WHERE patientappointment_tbl.StartSchedule BETWEEN @Start AND @End AND Status = 'Upcoming' AND EndSchedule > Now()
                                 AND patientappointment_tbl.doctorid = @doctorid";
                     using (MySqlCommand command = new MySqlCommand(query, conn))
@@ -140,6 +150,8 @@ namespace DoctorClinic
                          LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
                          LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
                          LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                         LEFT JOIN prescription_tbl ON prescription_tbl.appointmentdetailNo = appointmentdetails_tbl.AppointmentDetailNo
+                         LEFT JOIN diagnosis_tbl ON appointmentdetails_tbl.appointmentdetailNo = diagnosis_tbl.AppointmentDetailNo
                          WHERE patientappointment_tbl.DoctorId = @DoctorID
                          ORDER BY patientappointment_tbl.appointmentdetailno ASC";
                     using (MySqlCommand command = new MySqlCommand(query, conn))
@@ -175,7 +187,7 @@ namespace DoctorClinic
                     {
                         command.Parameters.AddWithValue("@Diagnosis", updatedSchedule.Diagnosis);
                         command.Parameters.AddWithValue("@AppointmentDetailNo", updatedSchedule.AppointmentDetailNo);
-                        command.Parameters.AddWithValue("@Prescription", updatedSchedule.Prescription);
+                        //command.Parameters.AddWithValue("@Prescription", updatedSchedule.Prescription);
                         command.ExecuteNonQuery();
                         return true;
                     }
@@ -570,7 +582,7 @@ namespace DoctorClinic
                     last_appointment AS (
                         SELECT 
                             DoctorID,
-                            MAX(EndTime) AS LastEndTime
+                            MAX(EndTime) AS LastEndTime     
                         FROM appointments
                         GROUP BY DoctorID
                     ),
@@ -655,6 +667,108 @@ namespace DoctorClinic
 
                     ";
         }
- 
+
+        internal bool insertNewPrescription(string pr, int appointmentDetailNo)
+        {
+           try
+            {
+                string query = @"
+                            INSERT INTO prescription_tbl (appointmentdetailno, prescription, prescriptiondate) 
+                            VALUES  (@appointmentdetailno, @prescription, @prescriptiondate)";
+                using (MySqlConnection conn = new MySqlConnection(DatabaseConnection.getConnection()))
+                {
+                    conn.Open();
+                    using (MySqlCommand command = new MySqlCommand(query, conn))
+                    {
+                        command.Parameters.AddWithValue("@appointmentdetailno", appointmentDetailNo);
+                        command.Parameters.AddWithValue("@prescription", pr);
+                        command.Parameters.AddWithValue("@prescriptiondate", DateTime.Now);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Error on insertNewPrescription() db: " + ex.Message);
+            }
+            return false;
+        }
+
+        internal bool insertNewDiagnosis(string pr, int appointmentDetailNo)
+        {
+            try
+            {
+                string query = @"
+                            INSERT INTO diagnosis_tbl (appointmentdetailno, diagnosis, diagnosisdate) 
+                            VALUES  (@appointmentdetailno, @diagnosis, @diagnosisdate)";
+                using (MySqlConnection conn = new MySqlConnection(DatabaseConnection.getConnection()))
+                {
+                    conn.Open();
+                    using (MySqlCommand command = new MySqlCommand(query, conn))
+                    {
+                        command.Parameters.AddWithValue("@appointmentdetailno", appointmentDetailNo);
+                        command.Parameters.AddWithValue("@diagnosis", pr);
+                        command.Parameters.AddWithValue("@diagnosisdate", DateTime.Now);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Error on insetNewDiagnosis() db: " + ex.Message);
+            }
+            return false;
+        }
+
+        internal List<Appointment> getSharedAppointmentByDoctor(string doctorID)
+        {
+            List<Appointment> appointments = new List<Appointment>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(DatabaseConnection.getConnection()))
+                {
+                    conn.Open();
+                    string query = @"
+                        SELECT * FROM appointmentRecord_tbl
+                         LEFT JOIN patientappointment_tbl ON appointmentRecord_tbl.AppointmentRecordNo = patientappointment_tbl.AppointmentRecordNo
+                         INNER JOIN discount_tbl ON discount_tbl.DiscountType = appointmentRecord_tbl.DiscountType
+                         LEFT JOIN patient_tbl ON patient_tbl.patientid = appointmentRecord_tbl.patientid
+                         LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
+                         LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
+                         LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                          LEFT JOIN (
+                          SELECT *
+                          FROM prescription_tbl
+                          LIMIT 1
+                        ) as p ON p.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                        LEFT JOIN (
+                          SELECT *
+                          FROM diagnosis_tbl
+                          LIMIT 1
+                        ) d ON d.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                         LEFT JOIN sharedappointment_tbl ON sharedappointment_tbl.sharedappointmentno = appointmentdetails_tbl.appointmentdetailNo
+                         WHERE sharedappointment_tbl.sharedDoctorId = @doctorid AND sharedappointment_tbl.Status = 'Allowed'
+                         ORDER BY patientappointment_tbl.appointmentdetailno ASC";
+                    using (MySqlCommand command = new MySqlCommand(query, conn))
+                    {
+                        command.Parameters.AddWithValue("@DoctorID", doctorID);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                appointments.Add(EntityMapping.GetAppointmentByDoctor(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Error from getPati ents() DB" + ex.Message);
+            }
+            return appointments;
+        }
     }
 }

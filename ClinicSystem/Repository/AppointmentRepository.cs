@@ -32,6 +32,16 @@ namespace ClinicSystem.Appointments
                             LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
                             LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
                             LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                            LEFT JOIN (
+                                  SELECT *
+                                  FROM prescription_tbl
+                                  LIMIT 1
+                                ) as p ON p.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                                LEFT JOIN (
+                                  SELECT *
+                                  FROM diagnosis_tbl
+                                  LIMIT 1
+                                ) d ON d.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
                             WHERE patientappointment_tbl.DOCTORID = @DOCTORID";
                     using (MySqlCommand command = new MySqlCommand(query, conn))
                     {
@@ -172,6 +182,16 @@ namespace ClinicSystem.Appointments
                             LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
                             LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
                             LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                            LEFT JOIN (
+                                  SELECT *
+                                  FROM prescription_tbl
+                                  LIMIT 1
+                                ) as p ON p.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                                LEFT JOIN (
+                                  SELECT *
+                                  FROM diagnosis_tbl
+                                  LIMIT 1
+                                ) d ON d.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
                             ORDER BY patientappointment_tbl.appointmentdetailno ASC";
 
                     using (MySqlCommand command = new MySqlCommand(query, conn))
@@ -211,6 +231,16 @@ namespace ClinicSystem.Appointments
                                   LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
                                   LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
                                   LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                                  LEFT JOIN (
+                                  SELECT *
+                                  FROM prescription_tbl
+                                  LIMIT 1
+                                ) as p ON p.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                                LEFT JOIN (
+                                  SELECT *
+                                  FROM diagnosis_tbl
+                                  LIMIT 1
+                                ) d ON d.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
                                   WHERE (Status = 'Upcoming' OR Status = 'Reappointment') AND DATE(StartSchedule) > CURDATE() + INTERVAL 3 DAY
                                   ORDER BY patientappointment_tbl.appointmentdetailno ASC";
 
@@ -582,6 +612,16 @@ namespace ClinicSystem.Appointments
                          LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
                          LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
                          LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                         LEFT JOIN (
+                                  SELECT *
+                                  FROM prescription_tbl
+                                  LIMIT 1
+                                ) as p ON p.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                                LEFT JOIN (
+                                  SELECT *
+                                  FROM diagnosis_tbl
+                                  LIMIT 1
+                                ) d ON d.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
                          WHERE Status = 'Absent' AND EndSchedule BETWEEN CURRENT_DATE - INTERVAL 7 DAY AND NOW()
                          ORDER BY patientappointment_tbl.appointmentdetailno ASC";
 
@@ -776,5 +816,7 @@ namespace ClinicSystem.Appointments
                 MessageBox.Show("Error from setDiscount() DB" + ex.Message);
             }
         }
+
+    
     }
 }

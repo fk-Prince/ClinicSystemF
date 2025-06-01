@@ -145,8 +145,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Diagnosis.cs" />
     <Compile Include="Entity\DoctorAppointment.cs" />
     <Compile Include="Entity\PenaltyAppointment.cs" />
+    <Compile Include="Entity\Prescription.cs" />
     <Compile Include="Forms\AppointmentsForm\AddAppointmentForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,6 +180,12 @@
     <Compile Include="Forms\DoctorClinicForm\AvailableDoctors.Designer.cs">
       <DependentUpon>AvailableDoctors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PatientForm\PatientDiagnosis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PatientForm\PatientDiagnosis.Designer.cs">
+      <DependentUpon>PatientDiagnosis.cs</DependentUpon>
+    </Compile>
     <Compile Include="MessagePromps\RFIDPromp.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -192,6 +200,12 @@
     </Compile>
     <Compile Include="Forms\AppointmentsForm\RescheduleForm.Designer.cs">
       <DependentUpon>RescheduleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Printer\PrintDoctorReceiptNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Printer\PrintDoctorReceiptNew.Designer.cs">
+      <DependentUpon>PrintDoctorReceiptNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Repository\AppointmentRepository.cs" />
     <Compile Include="Forms\ClinicHistoryForm\ClinicForm.cs">
@@ -340,6 +354,9 @@
     <EmbeddedResource Include="Forms\DoctorClinicForm\AvailableDoctors.resx">
       <DependentUpon>AvailableDoctors.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PatientForm\PatientDiagnosis.resx">
+      <DependentUpon>PatientDiagnosis.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Printer\PrintAppointmentReceipt.resx">
       <DependentUpon>PrintAppointmentReceipt.cs</DependentUpon>
     </EmbeddedResource>
@@ -387,6 +404,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PatientForm\PatientForm.resx">
       <DependentUpon>PatientForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Printer\PrintDoctorReceiptNew.resx">
+      <DependentUpon>PrintDoctorReceiptNew.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -503,6 +523,7 @@
     <None Include="Resources\checked2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\share.png" />
     <None Include="Resources\list.png" />
     <None Include="Resources\recycling_26px.png" />
     <None Include="Resources\employee.png" />

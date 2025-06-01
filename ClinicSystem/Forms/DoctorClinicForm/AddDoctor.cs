@@ -260,7 +260,7 @@ namespace ClinicSystem.Doctors
                                     rf += "*";
                                 }
                             }
-                            doctorID.Text = rf;
+                            lrfid.Text = rf;
                             lrfid.Visible = true;
                             doctorID.Visible = true;
                         }

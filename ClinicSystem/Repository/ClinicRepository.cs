@@ -114,6 +114,8 @@ namespace ClinicSystem.MainClinic
                                  LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
                                  LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
                                  LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo
+                                 LEFT JOIN prescription_tbl ON prescription_tbl.appointmentdetailNo = appointmentdetails_tbl.AppointmentDetailNo
+                                 LEFT JOIN diagnosis_tbl ON appointmentdetails_tbl.appointmentdetailNo = diagnosis_tbl.AppointmentDetailNo
                                  WHERE patientappointment_tbl.StartSchedule BETWEEN @Start AND @End AND Status = 'Upcoming' AND EndSchedule > Now()
                                  ORDER BY patientappointment_tbl.StartSchedule ASC";
                     using (MySqlCommand command = new MySqlCommand(query, conn))
@@ -148,18 +150,20 @@ namespace ClinicSystem.MainClinic
                     conn.Open();
                     string query = @"
                                 SELECT 
-                                COUNT(patientappointment_tbl.appointmentdetailno) AS totalAppointment,
-                                COUNT(DISTINCT appointmentrecord_tbl.patientid) AS totalPatient,
-                                doctor_tbl.*,
-                                sum(appointmentdetails_tbl.totalWithDiscount) as REVENUE
+                                    COUNT(patientappointment_tbl.appointmentdetailno) AS totalAppointment,
+                                    COUNT(DISTINCT appointmentrecord_tbl.patientid) AS totalPatient,
+                                    doctor_tbl.*,
+                                   sum(appointmentdetails_tbl.totalWithDiscount) as REVENUE
                                 FROM appointmentrecord_tbl
-                                INNER JOIN patientappointment_tbl ON appointmentrecord_tbl.AppointmentRecordNo =  patientappointment_tbl.AppointmentRecordNo
-                                INNER JOIN appointmentdetails_tbl ON appointmentdetails_tbl.appointmentdetailno = patientappointment_tbl.appointmentdetailno
-                                INNER JOIN doctor_tbl ON patientappointment_tbl.doctorid = doctor_tbl.doctorid
-                                WHERE appointmentrecord_tbl.BookingDate BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND LAST_DAY(CURRENT_DATE)
+                                LEFT JOIN patientappointment_tbl ON appointmentrecord_tbl.AppointmentRecordNo = patientappointment_tbl.AppointmentRecordNo
+                                LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.appointmentdetailno = patientappointment_tbl.appointmentdetailno
+                                LEFT JOIN doctor_tbl ON patientappointment_tbl.doctorid = doctor_tbl.doctorid
+                                WHERE appointmentrecord_tbl.BookingDate >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')
+                                  AND appointmentrecord_tbl.BookingDate < DATE_ADD(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 1 MONTH)
                                 GROUP BY doctor_tbl.doctorid
-                                ORDER BY revenue DESC
-                                LIMIT 1
+                                ORDER BY REVENUE DESC
+                                LIMIT 1;
+
                                 ";
                     using (MySqlCommand command = new MySqlCommand(query, conn))
                     {         
@@ -198,9 +202,9 @@ namespace ClinicSystem.MainClinic
                                 doctor_tbl.*,
                                 sum(appointmentdetails_tbl.totalWithDiscount) as REVENUE
                                 FROM appointmentrecord_tbl
-                                INNER JOIN patientappointment_tbl ON appointmentrecord_tbl.AppointmentRecordNo =  patientappointment_tbl.AppointmentRecordNo
-                                INNER JOIN appointmentdetails_tbl ON appointmentdetails_tbl.appointmentdetailno = patientappointment_tbl.appointmentdetailno
-                                INNER JOIN doctor_tbl ON patientappointment_tbl.doctorid = doctor_tbl.doctorid
+                                LEFT JOIN patientappointment_tbl ON appointmentrecord_tbl.AppointmentRecordNo =  patientappointment_tbl.AppointmentRecordNo
+                                LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.appointmentdetailno = patientappointment_tbl.appointmentdetailno
+                                LEFT JOIN doctor_tbl ON patientappointment_tbl.doctorid = doctor_tbl.doctorid
                                 WHERE appointmentrecord_tbl.BookingDate BETWEEN DATE_FORMAT(CURRENT_DATE - INTERVAL 1 MONTH, '%Y-%m-01') AND LAST_DAY(CURRENT_DATE - INTERVAL 1 MONTH)
                                 GROUP BY doctor_tbl.doctorid
                                 ORDER BY revenue DESC
@@ -287,6 +291,8 @@ namespace ClinicSystem.MainClinic
                                  LEFT JOIN doctor_tbl ON doctor_tbl.doctorId = patientappointment_tbl.doctorId
                                  LEFT JOIN operation_tbl ON operation_tbl.operationCode = patientappointment_tbl.OperationCode
                                  LEFT JOIN appointmentdetails_tbl ON appointmentdetails_tbl.AppointmentDetailNo = patientappointment_tbl.AppointmentDetailNo          
+                                LEFT JOIN prescription_tbl ON prescription_tbl.appointmentdetailNo = appointmentdetails_tbl.AppointmentDetailNo
+                                LEFT JOIN diagnosis_tbl ON appointmentdetails_tbl.appointmentdetailNo = diagnosis_tbl.AppointmentDetailNo
                                  WHERE EndSchedule < NOW() AND (Status = 'Upcoming' OR Status = 'Reappointment')
                                  ORDER BY patientappointment_tbl.appointmentdetailno ASC
                                 ";

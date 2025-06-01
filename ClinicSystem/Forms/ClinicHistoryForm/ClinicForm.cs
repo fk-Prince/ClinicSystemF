@@ -20,14 +20,22 @@ namespace ClinicSystem.ClinicHistory
     public partial class ClinicForm : Form
     {
         private AppointmentRepository appointmentRepository = new AppointmentRepository();
-        private List<Appointment> patientList;
+        private List<Appointment> patientList = new List<Appointment>();
         private DataTable dt = new DataTable();
         private DataTable ap = new DataTable();
 
         public ClinicForm(UserLoginForm.Staff staff)
         {
             InitializeComponent();
-            patientList = appointmentRepository.getAppointment();
+            List<Appointment> app = appointmentRepository.getAppointment();
+            foreach (Appointment a in app)
+            {
+                if (!patientList.Any(e => e.AppointmentDetailNo == a.AppointmentDetailNo))
+                {
+                    patientList.Add(a);
+                }
+
+            }
 
             date1.Value = new DateTime(2025, 1, 1);
             date2.Value = new DateTime(2100, 1, 1);

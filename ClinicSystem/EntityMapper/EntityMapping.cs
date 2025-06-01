@@ -112,14 +112,35 @@ namespace ClinicSystem.Helpers
                 reader.GetInt32("AppointmentDetailNo"),
                 reader.GetDouble("totalWithDiscount"),
                 GetDiscount(reader),
-                reader.IsDBNull(reader.GetOrdinal("diagnosis")) ? "" : reader.GetString("diagnosis"),
+                GetDiagnosis(reader),
                 reader.GetDateTime("BookingDate"),
                 reader.GetString("Status"),
-                reader.IsDBNull(reader.GetOrdinal("prescription")) ? "" : reader.GetString("prescription")
-
+                GetPrescription(reader)
             );
         }
 
+        private static Diagnosis GetDiagnosis(MySqlDataReader reader)
+        {
+           
+
+            return new Diagnosis(
+
+               reader.IsDBNull(reader.GetOrdinal("AppointmentDetailNo")) ? 0 : reader.GetInt32(reader.GetOrdinal("AppointmentDetailNo")),
+               reader.IsDBNull(reader.GetOrdinal("diagnosis")) ? "" : reader.GetString("diagnosis"),
+               reader.IsDBNull(reader.GetOrdinal("diagnosisDate")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("diagnosisDate"))
+               );
+        }
+
+        private static Prescription GetPrescription(MySqlDataReader reader)
+        {
+
+            return new Prescription(
+
+                reader.IsDBNull(reader.GetOrdinal("AppointmentDetailNo")) ? 0 : reader.GetInt32(reader.GetOrdinal("AppointmentDetailNo")),
+                reader.IsDBNull(reader.GetOrdinal("prescription")) ? "" : reader.GetString("prescription"),
+                reader.IsDBNull(reader.GetOrdinal("prescriptionDate")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("prescriptionDate"))
+                );
+        }
 
         public static Appointment GetAppointmentByDoctor(MySqlDataReader reader)
         {
@@ -133,10 +154,10 @@ namespace ClinicSystem.Helpers
                reader.GetInt32("AppointmentDetailNo"),
                reader.GetDouble("totalWithDiscount"),
                GetDiscount(reader),
-               reader.IsDBNull(reader.GetOrdinal("diagnosis")) ? "" : reader.GetString("diagnosis"),
+               GetDiagnosis(reader),
                reader.GetDateTime("BookingDate"),
                reader.GetString("Status"),
-               reader.IsDBNull(reader.GetOrdinal("prescription")) ? "" : reader.GetString("prescription")
+               GetPrescription(reader)
            );
         }
 

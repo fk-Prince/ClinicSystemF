@@ -8,6 +8,11 @@ using System.Web.UI.WebControls;
 using System.Data;
 using Guna.UI2.WinForms;
 using DoctorClinic;
+using ClinicSystem.Repository;
+using MySql.Data.MySqlClient;
+using ClinicSystem.UserLoginForm;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace ClinicSystem
 {
@@ -70,6 +75,7 @@ namespace ClinicSystem
             }
         }
 
+    
         private void displayTodayAppointment()
         {
             List<Appointment> appList = new DoctorRepository().getTodayAppointmentByDoctor(dr.DoctorID);
@@ -238,6 +244,8 @@ namespace ClinicSystem
                 //todayAppP.Location = new Point(dataGrid.Bottom + 20, (dataGrid.Location.Y + dataGrid.Height) + 20);
                 todayAppP.Visible = false;
             }
+
+            //b1.Location = new Point(label3.Right + 10, label3.Location.Y);
             dataGrid.Invalidate();
             todayAppP.Invalidate();
         }
@@ -297,5 +305,9 @@ namespace ClinicSystem
             }
             slidePanel.Location = new Point(x, slidePanel.Location.Y);
         }
+
+      
+
+        
     }
 }

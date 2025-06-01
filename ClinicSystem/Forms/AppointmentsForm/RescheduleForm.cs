@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -12,21 +13,32 @@ namespace ClinicSystem.Appointments
 {
     public partial class RescheduleForm : Form
     {
-        private List<Appointment> activeAppointments = new List<Appointment>();
+        private List<Appointment> f = new List<Appointment>();
         private AppointmentRepository appointmentRepository = new AppointmentRepository();
         private Appointment selectedAppointment;
         public RescheduleForm()
         {
             InitializeComponent();
-            activeAppointments = appointmentRepository.getReAppointment();
-            
+            //List<Appointment> app = appointmentRepository.getReAppointment();
+
             AutoCompleteStringCollection auto = new AutoCompleteStringCollection();
-            foreach (Appointment appointment in activeAppointments)
+
+            //foreach (Appointment a in app)
+            //{
+            //    if (!f.Any(e => e.AppointmentDetailNo == a.AppointmentDetailNo))
+            //    {
+            //        f.Add(a);
+            //    }
+
+            //}
+
+            f = appointmentRepository.getReAppointment();
+            foreach (Appointment appointment in f)
             {
-                comboAppointment.Items.Add(appointment.AppointmentDetailNo + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + " " + appointment.Patient.Middlename);
-                auto.Add(appointment.AppointmentDetailNo + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  ");
-                auto.Add(appointment.Patient.Patientid + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  " + " | " + appointment.AppointmentDetailNo);
-                auto.Add(appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  | " + appointment.Patient.Patientid + " | " + appointment.AppointmentDetailNo);
+                    comboAppointment.Items.Add(appointment.AppointmentDetailNo + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + " " + appointment.Patient.Middlename);
+                    auto.Add(appointment.AppointmentDetailNo + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  ");
+                    auto.Add(appointment.Patient.Patientid + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  " + " | " + appointment.AppointmentDetailNo);
+                    auto.Add(appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  | " + appointment.Patient.Patientid + " | " + appointment.AppointmentDetailNo);               
             }
             comboAppointment.AutoCompleteCustomSource = auto;
             dateSchedulePicker.Value = DateTime.Now;
@@ -54,27 +66,27 @@ namespace ClinicSystem.Appointments
 
 
             // for app id
-            selectedAppointment = activeAppointments.FirstOrDefault(p =>
+            selectedAppointment = f.FirstOrDefault(p =>
                 p.AppointmentDetailNo.ToString().Equals(ids.ElementAtOrDefault(0)?.Trim(), StringComparison.OrdinalIgnoreCase));
 
             // for patientid
             if (selectedAppointment == null)
             {
-                selectedAppointment = activeAppointments.FirstOrDefault(p =>
+                selectedAppointment = f.FirstOrDefault(p =>
                     p.AppointmentDetailNo.ToString().Equals(ids.ElementAtOrDefault(2)?.Trim(), StringComparison.OrdinalIgnoreCase));
             }
 
             //full name
             if (selectedAppointment == null)
             {
-                selectedAppointment = activeAppointments.FirstOrDefault(p =>
+                selectedAppointment = f.FirstOrDefault(p =>
                     p.AppointmentDetailNo.ToString().Equals(ids.ElementAtOrDefault(2)?.Trim(), StringComparison.OrdinalIgnoreCase));
             }
 
             //for general
             if (selectedAppointment == null)
             {
-                selectedAppointment = activeAppointments.FirstOrDefault(p =>
+                selectedAppointment = f.FirstOrDefault(p =>
                     p.AppointmentDetailNo.ToString().Equals(ids.ElementAtOrDefault(0)?.Trim(), StringComparison.OrdinalIgnoreCase) ||
                      p.AppointmentDetailNo.ToString().Equals(ids.ElementAtOrDefault(2)?.Trim(), StringComparison.OrdinalIgnoreCase) ||
                     p.AppointmentDetailNo.ToString().Equals(ids.ElementAtOrDefault(2)?.Trim(), StringComparison.OrdinalIgnoreCase)
@@ -120,7 +132,7 @@ namespace ClinicSystem.Appointments
         {
             if (comboAppointment.SelectedIndex == -1) return;
             int comboA = int.Parse(comboAppointment.SelectedItem.ToString().Split('|')[0].Trim());
-            foreach (Appointment selected in activeAppointments)
+            foreach (Appointment selected in f)
             {
                 if (selected.AppointmentDetailNo == comboA)
                 {
@@ -188,12 +200,12 @@ namespace ClinicSystem.Appointments
             {
                 List<Appointment> temp = new List<Appointment>();
                 temp.Add(app);
-                for (int i = 0; i < activeAppointments.Count; i++)
+                for (int i = 0; i < f.Count; i++)
                 {
-                    Appointment a = activeAppointments[i];
+                    Appointment a = f[i];
                     if (a.AppointmentDetailNo == app.AppointmentDetailNo)
                     {
-                        activeAppointments[i] = app;
+                        f[i] = app;
                         break;
                     }
                 }
@@ -249,7 +261,7 @@ namespace ClinicSystem.Appointments
                 selectedAppointment.Diagnosis,
                 selectedAppointment.BookingDate,
                 selectedAppointment.Status,
-                selectedAppointment.Prescription);
+                selectedAppointment.Ppp);
         }
     }
 }

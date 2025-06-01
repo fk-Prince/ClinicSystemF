@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ClinicSystem.Appointments;
+using DoctorClinic;
 using Guna.UI2.WinForms;
 
 
@@ -23,7 +24,9 @@ namespace ClinicSystem.Main2
             this.dr = dr;
             InitializeComponent();
             patientAppointments = appointmentRepository.getAppointmentsbyDoctor(dr);
-
+            //List<Appointment> appointments = new DoctorRepository().getSharedAppointmentByDoctor(dr.DoctorID);
+            //patientAppointments.AddRange(appointments);
+          
             table.Columns.Add("Appointment No", typeof(int));
             table.Columns.Add("Operation", typeof(string));
             table.Columns.Add("Start Appointment", typeof(string));

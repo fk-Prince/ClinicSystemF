@@ -92,16 +92,16 @@ namespace ClinicSystem.DoctorClinic
                 e.Graphics.DrawString($"Doctor Name:  {fullname}", mainFont, Brushes.Black, x, y + 80);
 
 
-                sb = checkDiagnosisLength(a.Diagnosis);
-                e.Graphics.DrawLine(Pens.Black, 60, y + 120, this.Width - 60, y + 120);
-                e.Graphics.DrawString($"Doctor Diagnosis:", mainFont, Brushes.Black, x, y + 130);
-                e.Graphics.DrawString(sb.ToString(), new Font("Arial", 11), brush, x + 10, y + 155);
+                //sb = checkDiagnosisLength(a.Diagnosis);
+                //e.Graphics.DrawLine(Pens.Black, 60, y + 120, this.Width - 60, y + 120);
+                //e.Graphics.DrawString($"Doctor Diagnosis:", mainFont, Brushes.Black, x, y + 130);
+                //e.Graphics.DrawString(sb.ToString(), new Font("Arial", 11), brush, x + 10, y + 155);
 
-                e.Graphics.DrawLine(Pens.Black, 60, y + 220, this.Width - 60, y + 220);
-                sb = checkDiagnosisLength(a.Prescription);
-                e.Graphics.DrawString($"Doctor Prescription:", mainFont, Brushes.Black, x, y + 230);
-                e.Graphics.DrawString(sb.ToString(), new Font("Arial", 11), brush, x + 10, y + 255);
-                e.Graphics.DrawLine(Pens.Black, 60, y + 330, this.Width - 60, y + 330);
+                //e.Graphics.DrawLine(Pens.Black, 60, y + 220, this.Width - 60, y + 220);
+                ////sb = checkDiagnosisLength(a.Prescription);
+                //e.Graphics.DrawString($"Doctor Prescription:", mainFont, Brushes.Black, x, y + 230);
+                //e.Graphics.DrawString(sb.ToString(), new Font("Arial", 11), brush, x + 10, y + 255);
+                //e.Graphics.DrawLine(Pens.Black, 60, y + 330, this.Width - 60, y + 330);
 
                 size1 = graphics.MeasureString("Start Appointment:", mainFont);
                 e.Graphics.DrawString($"Start Appointment", mainFont, Brushes.Black, 600 - size1.Width, y + 40);

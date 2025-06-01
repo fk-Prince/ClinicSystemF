@@ -38,11 +38,18 @@ namespace ClinicSystem.Forms.AppointmentsForm
             AutoCompleteStringCollection auto = new AutoCompleteStringCollection();
             foreach (Appointment appointment in missedAppointments)
             {
-                comboAppointment.Items.Add(appointment.AppointmentDetailNo + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + " " + appointment.Patient.Middlename);
-                auto.Add(appointment.AppointmentDetailNo + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  ");
-                auto.Add(appointment.Patient.Patientid + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  " + " | " + appointment.AppointmentDetailNo);
-                auto.Add(appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  | " + appointment.Patient.Patientid + " | " + appointment.AppointmentDetailNo);
+                //bool pr = comboAppointment.Items.Cast<object>()
+                //    .Any(item => item.ToString().StartsWith(appointment.AppointmentDetailNo.ToString() + " |"));
+                //if (!pr)
+                //{
+                //}
+                    comboAppointment.Items.Add(appointment.AppointmentDetailNo + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + " " + appointment.Patient.Middlename);
+                    auto.Add(appointment.AppointmentDetailNo + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  ");
+                    auto.Add(appointment.Patient.Patientid + " | " + appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  " + " | " + appointment.AppointmentDetailNo);
+                    auto.Add(appointment.Patient.Lastname + ", " + appointment.Patient.Firstname + $" {appointment.Patient.Middlename}  | " + appointment.Patient.Patientid + " | " + appointment.AppointmentDetailNo);
+                
             }
+            
             comboAppointment.AutoCompleteCustomSource = auto;
         }
         

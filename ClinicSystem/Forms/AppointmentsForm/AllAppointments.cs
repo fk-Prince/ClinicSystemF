@@ -5,13 +5,14 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ClinicSystem.UserLoginForm;
+using Google.Protobuf.WellKnownTypes;
 using Guna.UI2.WinForms;
 
 namespace ClinicSystem.Appointments
 {
     public partial class AllAppointments : Form
     {
-        private List<Appointment> patientAppointments;
+        private List<Appointment> patientAppointments = new List<Appointment>();
         private AppointmentRepository db = new AppointmentRepository();
         private DataTable table = new DataTable();
 
@@ -27,7 +28,15 @@ namespace ClinicSystem.Appointments
             table.Columns.Add("Patient Fullname", typeof(string));
             dataGrid.DataSource = table;
 
-        
+            //List<Appointment> app = 
+            //foreach (Appointment a in app)
+            //{
+            //    if (!patientAppointments.Any(e => e.AppointmentDetailNo == a.AppointmentDetailNo))
+            //    {
+            //        patientAppointments.Add(a);
+            //    }
+
+            //}
             patientAppointments = db.getAppointment();
             date1.Value = DateTime.Now;
             date2.Value = DateTime.Now;
