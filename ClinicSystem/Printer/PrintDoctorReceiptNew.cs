@@ -108,9 +108,10 @@ namespace ClinicSystem.Printer
             e.Graphics.DrawString($"Gender  : {selectedPatient.Gender}", new Font("Sans-serif", 12), Brushes.Black, 30, 250);
             e.Graphics.DrawString($"Contact No.  : {selectedPatient.ContactNumber}", new Font("Sans-serif", 12), Brushes.Black, 30, 270);
 
-            e.Graphics.DrawString($"Attending Doctor  : {doctorFullName}", new Font("Sans-serif", 12, FontStyle.Bold), Brushes.Black, 30, 300);
-            e.Graphics.DrawString($"Dr. Contact No.  : {selectedDoctor.DoctorContactNumber}", new Font("Sans-serif", 12), Brushes.Black, 30, 330);
+            e.Graphics.DrawString($"Attending Doctor  : {doctorFullName}", new Font("Sans-serif", 12, FontStyle.Bold), Brushes.Black, 30, 320);
+            e.Graphics.DrawString($"Dr. Contact No.  : {selectedDoctor.DoctorContactNumber}", new Font("Sans-serif", 12), Brushes.Black, 30, 340);
             e.Graphics.DrawString($"Date Issued.  : {DateTime.Now}", new Font("Sans-serif", 12), Brushes.Black, 30, 360);
+
         }
 
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)

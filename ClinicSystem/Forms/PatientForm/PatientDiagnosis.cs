@@ -29,6 +29,7 @@ namespace ClinicSystem.Forms.PatientForm
         private DataTable t2 = new DataTable();
         private Appointment selected;
         private Guna2Button lastClickedButton;
+        private string type;
 
         public PatientDiagnosis(Appointment selected, string type, Doctor dr)
         {
@@ -39,14 +40,16 @@ namespace ClinicSystem.Forms.PatientForm
                 b1.Visible = false;
                 b2.Visible = false;
                 pr.Visible = false;
+                dd.Visible = false;
                 limitD.Visible = false;
-                d1.Size = new Size(976, 454);
-                d2.Size = new Size(976, 454);
-                d1.Refresh();
-                d2.Refresh();
+                d1p.Size = new Size(976, 454);
+                d2d.Size = new Size(976, 454);
+                d1p.Refresh();
+                d2d.Refresh();
 
-                d1.Invalidate();
-                d2.Invalidate();
+                d1p.Invalidate();
+                d2d.Invalidate();
+                this.dr = selected.Doctor;
             }
             else
             {
@@ -65,17 +68,19 @@ namespace ClinicSystem.Forms.PatientForm
 
         private void table()
         {
+            t1.Columns.Add("Prescription No", typeof(string));
             t1.Columns.Add("Appointment No", typeof(string));
             t1.Columns.Add("Prescription", typeof(string));
             t1.Columns.Add("Prescription Date", typeof(string));
-            d1.AutoGenerateColumns = true;
-            d1.DataSource = t1;
+            d1p.AutoGenerateColumns = true;
+            d1p.DataSource = t1;
 
+            t2.Columns.Add("Diagnosis No", typeof(string));
             t2.Columns.Add("Appointment No", typeof(string));
             t2.Columns.Add("Diagnosis", typeof(string));
             t2.Columns.Add("Diagnosis Date", typeof(string));
-            d2.AutoGenerateColumns = true;
-            d2.DataSource = t2;
+            d2d.AutoGenerateColumns = true;
+            d2d.DataSource = t2;
         }
 
         private void getPrescription()
@@ -95,10 +100,11 @@ namespace ClinicSystem.Forms.PatientForm
                         {
                             while (reader.Read())
                             {
+                                string prescriptionNo = reader.GetInt32("prescriptionno").ToString();
                                 string appointmentNo = reader["appointmentdetailNo"].ToString();
                                 string prescription = reader["prescription"].ToString();
                                 DateTime date = Convert.ToDateTime(reader["prescriptiondate"]);
-                                t1.Rows.Add(appointmentNo, InsertNewLines(prescription, 50), date.ToString("yyyy-MM-dd") + Environment.NewLine + date.ToString("hh:mm:dd tt"));
+                                t1.Rows.Add(prescriptionNo,appointmentNo, InsertNewLines(prescription, 50), date.ToString("yyyy-MM-dd") + Environment.NewLine + date.ToString("hh:mm:dd tt"));
                             }
                         }
                     }
@@ -117,10 +123,11 @@ namespace ClinicSystem.Forms.PatientForm
                         {
                             while (reader.Read())
                             {
+                                string diagnosisNo = reader.GetInt32("diagnosisNo").ToString();
                                 string appointmentNo = reader["appointmentdetailNo"].ToString();
                                 string diagnosis = reader["diagnosis"].ToString();
                                 DateTime date1 = Convert.ToDateTime(reader["diagnosisdate"]);
-                                t2.Rows.Add(appointmentNo, InsertNewLines(diagnosis, 50), date1.ToString("yyyy-MM-dd") + Environment.NewLine + date1.ToString("hh:mm:dd tt"));
+                                t2.Rows.Add(diagnosisNo,appointmentNo, InsertNewLines(diagnosis, 50), date1.ToString("yyyy-MM-dd") + Environment.NewLine + date1.ToString("hh:mm:dd tt"));
                             }
                         }
                     }
@@ -215,23 +222,25 @@ namespace ClinicSystem.Forms.PatientForm
 
         private void PatientDiagnosis_Load(object sender, EventArgs e)
         {
-            d1.EnableHeadersVisualStyles = false;
-            d1.ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#5CA8A3");
-            d1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            d1.ColumnHeadersDefaultCellStyle.Font = new Font("Segui", 12);
-            d1.ColumnHeadersDefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#5CA8A3");
-            d1.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
-            d1.Columns[0].Width = 100;
-            d1.Columns[2].Width = 150;
+            d1p.EnableHeadersVisualStyles = false;
+            d1p.ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#5CA8A3");
+            d1p.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            d1p.ColumnHeadersDefaultCellStyle.Font = new Font("Segui", 12);
+            d1p.ColumnHeadersDefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#5CA8A3");
+            d1p.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
+            d1p.Columns[0].Width = 100;
+            d1p.Columns[1].Width = 100;
+            d1p.Columns[3].Width = 150;
 
-            d2.EnableHeadersVisualStyles = false;
-            d2.ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#5CA8A3");
-            d2.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            d2.ColumnHeadersDefaultCellStyle.Font = new Font("Segui", 12);
-            d2.ColumnHeadersDefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#5CA8A3");
-            d2.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
-            d2.Columns[0].Width = 100;
-            d2.Columns[2].Width = 150;
+            d2d.EnableHeadersVisualStyles = false;
+            d2d.ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#5CA8A3");
+            d2d.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            d2d.ColumnHeadersDefaultCellStyle.Font = new Font("Segui", 12);
+            d2d.ColumnHeadersDefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#5CA8A3");
+            d2d.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
+            d2d.Columns[0].Width = 100;
+            d2d.Columns[1].Width = 100;
+            d2d.Columns[3].Width = 150;
         }
 
         private void SetButtonColor(Guna2Button btn)
@@ -248,8 +257,8 @@ namespace ClinicSystem.Forms.PatientForm
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            d1.Visible = true;
-            d2.Visible = false;
+            d1p.Visible = true;
+            d2d.Visible = false;
             b1.Enabled = true;
             b2.Enabled = false;
             b2.BorderThickness = 1;
@@ -259,8 +268,8 @@ namespace ClinicSystem.Forms.PatientForm
 
         private void guna2Button3_Click(object sender, EventArgs e)
         {
-            d1.Visible = false;
-            d2.Visible = true;
+            d1p.Visible = false;
+            d2d.Visible = true;
             b1.Enabled = false;
             b2.Enabled = true;
             b2.BorderThickness = 0;
@@ -319,7 +328,7 @@ namespace ClinicSystem.Forms.PatientForm
         {
             if (doctorRepository.setPatientDischarged(app.AppointmentDetailNo))
             {
-                MessagePromp.MainShowMessage(this, "Succefully Discharged .", MessageBoxIcon.Information);
+                MessagePromp.MainShowMessage(this, "Succefully Discharged.", MessageBoxIcon.Information);
                 dd.Visible = false;
                 PrintDoctorReceiptNew p = new PrintDoctorReceiptNew(app, dr, "Patient has been discharged.", "Discharged");
                 p.print();
@@ -329,6 +338,181 @@ namespace ClinicSystem.Forms.PatientForm
         private void guna2PictureBox1_Click(object sender, EventArgs e)
         {
             this.Hide();
+        }
+
+        private void guna2Button1_Click_2(object sender, EventArgs e)
+        {
+            if (a != null && d1p.Visible)
+            {             
+                PrintDoctorReceiptNew print = new PrintDoctorReceiptNew(a, dr, a.Ppp.pp, "Prescription");
+                print.print();
+            }
+            else if (a != null && d2d.Visible)
+            {
+                PrintDoctorReceiptNew print = new PrintDoctorReceiptNew(a, dr, a.Diagnosis.dd, "Diagnosis");
+                print.print();
+            }
+            else if (d2d.Visible)
+            {
+                MessagePromp.ShowCenter(this, "Please select an Diagnosis", MessageBoxIcon.Error);
+            }
+            else if (d1p.Visible)
+            {
+                MessagePromp.ShowCenter(this, "Please select an Prescription", MessageBoxIcon.Error);
+            }
+            a = null;
+        }
+
+        private Appointment a;
+
+        private void d1_MouseClick(object sender, MouseEventArgs e)
+        {
+            var hit = d1p.HitTest(e.X, e.Y);
+
+            if (hit.Type == DataGridViewHitTestType.Cell && hit.RowIndex >= 0)
+            {
+                DataGridViewRow row = d1p.Rows[hit.RowIndex];
+                if (row.Cells["Prescription No"]?.Value != null)
+                {
+                    string pNo = row.Cells["Prescription No"].Value.ToString();
+
+                    Prescription p = getPrescription(pNo);
+
+                    if(p != null)
+                    {
+                        this.a = new Appointment(
+                            app.Patient,
+                            app.Operation,
+                            app.StartTime,
+                            app.EndTime,
+                            app.SubTotal,
+                            app.RoomNo,
+                            app.AppointmentDetailNo,
+                            app.Total,
+                            app.Discount,
+                            app.Diagnosis,
+                            app.BookingDate,
+                            app.Status,
+                            p
+                            );
+
+                    }
+
+                } 
+
+            }
+        }
+
+        private Prescription getPrescription(string pNo)
+        {
+            try
+            {
+                string query = @"
+                            SELECT * FROM prescription_tbl         
+                            WHERE prescription_tbl.prescriptionNO = @prescriptionNO";
+                using (MySqlConnection conn = new MySqlConnection(DatabaseConnection.getConnection()))
+                {
+                    conn.Open();
+                    using (MySqlCommand command = new MySqlCommand(query, conn))
+                    {
+                        command.Parameters.AddWithValue("@prescriptionNO", pNo);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string prescription = reader["prescription"].ToString();
+                                DateTime date = Convert.ToDateTime(reader["prescriptiondate"]);
+                                return new Prescription(reader.GetInt32("prescriptionno"), reader.GetInt32("appointmentdetailNo"), prescription, date);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("error on getPrescription() " + ex.Message);
+            }
+            return null;
+        }
+
+        private void d2d_MouseClick(object sender, MouseEventArgs e)
+        {
+            var hit = d2d.HitTest(e.X, e.Y);
+
+            if (hit.Type == DataGridViewHitTestType.Cell && hit.RowIndex >= 0)
+            {
+                DataGridViewRow row = d2d.Rows[hit.RowIndex];
+                if (row.Cells["Diagnosis No"]?.Value != null)
+                {
+                    string dNo = row.Cells["Diagnosis No"].Value.ToString();
+
+                    Diagnosis d = getDiagnosis(dNo);
+
+                    if (d != null)
+                    {
+                        this.a = new Appointment(
+                            app.Patient,
+                            app.Operation,
+                            app.StartTime,
+                            app.EndTime,
+                            app.SubTotal,
+                            app.RoomNo,
+                            app.AppointmentDetailNo,
+                            app.Total,
+                            app.Discount,
+                            d,
+                            app.BookingDate,
+                            app.Status,
+                            app.Ppp
+                            );
+
+                    }
+
+                }
+
+            }
+        }
+
+        private Diagnosis getDiagnosis(string dNo)
+        {
+            try
+            {
+                string query = @"
+                            SELECT * FROM diagnosis_Tbl         
+                            WHERE diagnosis_Tbl.DiagnosisNo = @DiagnosisNo";
+                using (MySqlConnection conn = new MySqlConnection(DatabaseConnection.getConnection()))
+                {
+                    conn.Open();
+                    using (MySqlCommand command = new MySqlCommand(query, conn))
+                    {
+                        command.Parameters.AddWithValue("@DiagnosisN0", dNo);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string prescription = reader["diagnosis"].ToString();
+                                DateTime date = Convert.ToDateTime(reader["diagnosisdate"]);
+                                return new Diagnosis(reader.GetInt32("diagnosisNo"), reader.GetInt32("appointmentdetailNo"), prescription, date);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("error on getPrescription() " + ex.Message);
+            }
+            return null;
+        }
+
+        private void d1p_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            d1p.ClearSelection();
+        }
+
+        private void d2d_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            d2d.ClearSelection();
         }
     }
 }

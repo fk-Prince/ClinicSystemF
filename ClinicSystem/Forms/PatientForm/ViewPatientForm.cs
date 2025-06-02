@@ -153,14 +153,15 @@ namespace ClinicSystem
                     {
                         if (selected.Patient.Patientid == pas.Patient.Patientid)
                         {
-                            if (dt1.Rows.Count > 0)
-                            {
-                                var value = dt1.Rows[0]["Appointment No"];
-                                if (value != DBNull.Value && !string.IsNullOrWhiteSpace(value.ToString()))
-                                {
-                                    continue;
-                                }
-                            }
+                           
+                            //if (dt1.Rows.Count > 0)
+                            //{
+                            //    var value = dt1.Rows[0]["Appointment No"];
+                            //    if (value != DBNull.Value && !string.IsNullOrWhiteSpace(value.ToString()))
+                            //    {
+                            //        continue;
+                            //    }
+                            //}
                             dt1.Rows.Add
                             (
                                 pas.AppointmentDetailNo,
