@@ -18,7 +18,6 @@
 --
 -- Table structure for table `appointmentdetails_tbl`
 --
-
 DROP DATABASE IF EXISTS clinic;
 CREATE DATABASE clinic;
 USE clinic;
@@ -40,6 +39,7 @@ CREATE TABLE `appointmentdetails_tbl` (
 
 LOCK TABLES `appointmentdetails_tbl` WRITE;
 /*!40000 ALTER TABLE `appointmentdetails_tbl` DISABLE KEYS */;
+INSERT INTO `appointmentdetails_tbl` VALUES (1,1000.00,800.00),(2,1800.00,1440.00),(3,1800.00,1800.00);
 /*!40000 ALTER TABLE `appointmentdetails_tbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +90,7 @@ CREATE TABLE `appointmentrecord_tbl` (
   CONSTRAINT `b` FOREIGN KEY (`staffid`) REFERENCES `staff_tbl` (`StaffID`) ON UPDATE CASCADE,
   CONSTRAINT `dad` FOREIGN KEY (`DiscountType`) REFERENCES `discount_tbl` (`DiscountType`) ON UPDATE CASCADE,
   CONSTRAINT `PAITNETID` FOREIGN KEY (`patientid`) REFERENCES `patient_tbl` (`patientId`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,6 +99,7 @@ CREATE TABLE `appointmentrecord_tbl` (
 
 LOCK TABLES `appointmentrecord_tbl` WRITE;
 /*!40000 ALTER TABLE `appointmentrecord_tbl` DISABLE KEYS */;
+INSERT INTO `appointmentrecord_tbl` VALUES (24,'P2025-000001',2,'PhilHealth ','2025-06-02 14:50:25'),(25,'P2025-000001',2,'PhilHealth ','2025-06-02 14:50:58'),(26,'P2025-000002',2,'No Discount','2025-06-02 16:29:12');
 /*!40000 ALTER TABLE `appointmentrecord_tbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,12 +111,14 @@ DROP TABLE IF EXISTS `diagnosis_tbl`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `diagnosis_tbl` (
+  `DiagnosisNo` bigint NOT NULL AUTO_INCREMENT,
   `AppointmentDetailNo` bigint NOT NULL,
   `Diagnosis` varchar(200) NOT NULL,
   `DiagnosisDate` datetime NOT NULL,
+  PRIMARY KEY (`DiagnosisNo`),
   KEY `asdasbasd_idx` (`AppointmentDetailNo`),
   CONSTRAINT `asdasbasd` FOREIGN KEY (`AppointmentDetailNo`) REFERENCES `appointmentdetails_tbl` (`AppointmentDetailNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,6 +127,7 @@ CREATE TABLE `diagnosis_tbl` (
 
 LOCK TABLES `diagnosis_tbl` WRITE;
 /*!40000 ALTER TABLE `diagnosis_tbl` DISABLE KEYS */;
+INSERT INTO `diagnosis_tbl` VALUES (1,2,'vasdvasda','2025-06-02 16:22:01');
 /*!40000 ALTER TABLE `diagnosis_tbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -282,6 +286,7 @@ CREATE TABLE `patient_tbl` (
 
 LOCK TABLES `patient_tbl` WRITE;
 /*!40000 ALTER TABLE `patient_tbl` DISABLE KEYS */;
+INSERT INTO `patient_tbl` VALUES ('P2025-000001','Prince ','Iba','Sestoso','Roxas','Male','2024-11-14','09771171913',0),('P2025-000002','Rafael','Ababa','Ababa','qwevqwevqw','Male','2025-01-15',NULL,0);
 /*!40000 ALTER TABLE `patient_tbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -311,7 +316,7 @@ CREATE TABLE `patientappointment_tbl` (
   CONSTRAINT `doctorid` FOREIGN KEY (`DoctorID`) REFERENCES `doctor_operation_mm_tbl` (`doctorId`) ON UPDATE CASCADE,
   CONSTRAINT `operat` FOREIGN KEY (`OperationCode`) REFERENCES `doctor_operation_mm_tbl` (`operationCode`) ON UPDATE CASCADE,
   CONSTRAINT `sabdasc` FOREIGN KEY (`AppointmentRecordNo`) REFERENCES `appointmentrecord_tbl` (`AppointmentRecordNo`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -320,6 +325,7 @@ CREATE TABLE `patientappointment_tbl` (
 
 LOCK TABLES `patientappointment_tbl` WRITE;
 /*!40000 ALTER TABLE `patientappointment_tbl` DISABLE KEYS */;
+INSERT INTO `patientappointment_tbl` VALUES (1,24,101,'BP102','D2025-000003','2025-06-02 20:30:00','2025-06-02 21:00:00','Discharged'),(2,25,401,'MWD102','D2025-000004','2025-10-30 10:00:00','2025-10-30 10:45:00','Upcoming'),(3,26,402,'MWD102','D2025-000004','2025-06-10 10:00:00','2025-06-10 10:45:00','Upcoming');
 /*!40000 ALTER TABLE `patientappointment_tbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,12 +337,14 @@ DROP TABLE IF EXISTS `prescription_tbl`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `prescription_tbl` (
+  `prescriptionno` bigint NOT NULL AUTO_INCREMENT,
   `appointmentdetailno` bigint NOT NULL,
   `prescription` varchar(200) NOT NULL,
   `prescriptiondate` datetime NOT NULL,
+  PRIMARY KEY (`prescriptionno`),
   KEY `asd_idx` (`appointmentdetailno`),
   CONSTRAINT `asddfgdfg` FOREIGN KEY (`appointmentdetailno`) REFERENCES `appointmentdetails_tbl` (`AppointmentDetailNo`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -345,6 +353,7 @@ CREATE TABLE `prescription_tbl` (
 
 LOCK TABLES `prescription_tbl` WRITE;
 /*!40000 ALTER TABLE `prescription_tbl` DISABLE KEYS */;
+INSERT INTO `prescription_tbl` VALUES (1,2,'vsdfsdfcsdfsd','2025-06-02 15:51:22');
 /*!40000 ALTER TABLE `prescription_tbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -439,4 +448,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-01 13:38:32
+-- Dump completed on 2025-06-02 16:40:59
