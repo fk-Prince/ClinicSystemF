@@ -190,8 +190,8 @@ namespace ClinicSystem.Forms.PatientForm
             if (string.IsNullOrEmpty(pr.Text.Trim())) return;
             if (doctorRepository.insertNewPrescription(pr.Text.Trim(), app.AppointmentDetailNo))
             {
-                PrintDoctorReceiptNew p = new PrintDoctorReceiptNew(app, dr, pr.Text.Trim(), "Prescription");
-                p.print();
+                //PrintDoctorReceiptNew p = new PrintDoctorReceiptNew(app, dr, pr.Text.Trim(), "Prescription");
+                //p.print();
 
                 t1.Rows.Add(app.AppointmentDetailNo, InsertNewLines(pr.Text.Trim(), 50), DateTime.Now.ToString("yyyy-MM-dd") + Environment.NewLine + DateTime.Now.ToString("hh:mm:dd tt"));
                 MessagePromp.ShowCenter(this, "Successfully added prescription", MessageBoxIcon.Information);
@@ -209,8 +209,8 @@ namespace ClinicSystem.Forms.PatientForm
             if (string.IsNullOrEmpty(pr.Text.Trim())) return;
             if (doctorRepository.insertNewDiagnosis(pr.Text.Trim(), app.AppointmentDetailNo))
             {
-                PrintDoctorReceiptNew p = new PrintDoctorReceiptNew(app, dr, pr.Text.Trim(), "Diagnosis");
-                p.print();
+                //PrintDoctorReceiptNew p = new PrintDoctorReceiptNew(app, dr, pr.Text.Trim(), "Diagnosis");
+                //p.print();
                 t2.Rows.Add(app.AppointmentDetailNo, InsertNewLines(pr.Text.Trim(), 50), DateTime.Now.ToString("yyyy-MM-dd") + Environment.NewLine + DateTime.Now.ToString("hh:mm:dd tt"));
                 MessagePromp.ShowCenter(this, "Successfully added diagnosis", MessageBoxIcon.Information);
             }
