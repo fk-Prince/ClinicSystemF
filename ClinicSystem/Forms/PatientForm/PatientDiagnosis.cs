@@ -30,6 +30,7 @@ namespace ClinicSystem.Forms.PatientForm
         private Appointment selected;
         private Guna2Button lastClickedButton;
         private string type;
+        private int lastd, lastp;
 
         public PatientDiagnosis(Appointment selected, string type, Doctor dr)
         {
@@ -100,6 +101,7 @@ namespace ClinicSystem.Forms.PatientForm
                         {
                             while (reader.Read())
                             {
+                                lastp = reader.GetInt32("prescriptionno");
                                 string prescriptionNo = reader.GetInt32("prescriptionno").ToString();
                                 string appointmentNo = reader["appointmentdetailNo"].ToString();
                                 string prescription = reader["prescription"].ToString();
@@ -123,6 +125,7 @@ namespace ClinicSystem.Forms.PatientForm
                         {
                             while (reader.Read())
                             {
+                                lastd = reader.GetInt32("diagnosisNo");
                                 string diagnosisNo = reader.GetInt32("diagnosisNo").ToString();
                                 string appointmentNo = reader["appointmentdetailNo"].ToString();
                                 string diagnosis = reader["diagnosis"].ToString();
@@ -193,7 +196,7 @@ namespace ClinicSystem.Forms.PatientForm
                 //PrintDoctorReceiptNew p = new PrintDoctorReceiptNew(app, dr, pr.Text.Trim(), "Prescription");
                 //p.print();
 
-                t1.Rows.Add(app.AppointmentDetailNo, InsertNewLines(pr.Text.Trim(), 50), DateTime.Now.ToString("yyyy-MM-dd") + Environment.NewLine + DateTime.Now.ToString("hh:mm:dd tt"));
+                t1.Rows.Add(lastp.ToString(), app.AppointmentDetailNo, InsertNewLines(pr.Text.Trim(), 50), DateTime.Now.ToString("yyyy-MM-dd") + Environment.NewLine + DateTime.Now.ToString("hh:mm:dd tt"));
                 MessagePromp.ShowCenter(this, "Successfully added prescription", MessageBoxIcon.Information);
             }
             else
@@ -211,7 +214,7 @@ namespace ClinicSystem.Forms.PatientForm
             {
                 //PrintDoctorReceiptNew p = new PrintDoctorReceiptNew(app, dr, pr.Text.Trim(), "Diagnosis");
                 //p.print();
-                t2.Rows.Add(app.AppointmentDetailNo, InsertNewLines(pr.Text.Trim(), 50), DateTime.Now.ToString("yyyy-MM-dd") + Environment.NewLine + DateTime.Now.ToString("hh:mm:dd tt"));
+                t2.Rows.Add(lastp.ToString(),app.AppointmentDetailNo, InsertNewLines(pr.Text.Trim(), 50), DateTime.Now.ToString("yyyy-MM-dd") + Environment.NewLine + DateTime.Now.ToString("hh:mm:dd tt"));
                 MessagePromp.ShowCenter(this, "Successfully added diagnosis", MessageBoxIcon.Information);
             }
             else
